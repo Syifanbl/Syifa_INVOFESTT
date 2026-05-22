@@ -1,49 +1,77 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react"; 
 
-// Tipe data disesuaikan dengan key dari backend kamu
 type EventFormData = {
   name: string;
   dateEvent: string;
   location: string;
   description: string;
+  categoryId: string;  
+  pembicaraId: string;  
 };
+
+interface Sepeaker {
+  id: number;
+  name: string;
+}
 
 export default function EventCreate() {
   const navigate = useNavigate();
+  // 3. State untuk menyimpan data dropdown
+  const [categories, setCategories] = useState<any[]>([]);
+  const [speakers, setSpeakers] = useState<Sepeaker[]>([]);
 
-  // Inisialisasi react-hook-form
+  // 4. Fetch data saat halaman pertama kali dimuat
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [resCat, resSpk] = await Promise.all([
+          fetch("https://syifa-backend.vercel.app/categories"),
+          fetch("https://syifa-backend.vercel.app/pembicara")
+        ]);
+        const catData = await resCat.json();
+        const spkData = await resSpk.json();
+        
+        
+        setCategories(catData.data || catData);
+        setSpeakers(spkData.data || spkData);
+        console.log("Data Pembicara dari API:", spkData); 
+      } catch (error) {
+        console.error("Gagal mengambil data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const { register, handleSubmit, formState: { errors } } = useForm<EventFormData>();
+  console.log(errors);
 
   const onSubmit = async (data: EventFormData) => {
     try {
-      // Menyiapkan data agar strukturnya tepat sesuai req.body backend
       const formattedData = {
         name: data.name,
         location: data.location,
-        dateEvent: data.dateEvent, // Mengirim string tanggal langsung karena backend punya fungsi parseDate()
-        description: data.description
+        dateEvent: data.dateEvent,
+        description: data.description,
+        categoryId: parseInt(data.categoryId), 
+        pembicaraId: parseInt(data.pembicaraId) 
       };
 
       const response = await fetch("https://syifa-backend.vercel.app/events", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formattedData),
       });
 
       const result = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(result.message || "Gagal menyimpan data event ke server");
-      }
+      if (!response.ok) throw new Error(result.message || "Gagal menyimpan data");
 
       alert("Event Berhasil Ditambahkan");
       navigate("/dashboard/event"); 
     } catch (error: any) {
       console.error(error);
-      alert(error.message || "Terjadi kesalahan koneksi ke server");
+      alert(error.message || "Terjadi kesalahan");
     }
   };
 
@@ -51,71 +79,52 @@ export default function EventCreate() {
     <div className="flex justify-center items-center min-h-screen p-6">
       <div className="w-160 bg-[#FCE7F3] shadow-lg rounded-2xl p-10">
         <h1 className="text-2xl font-bold mb-2 text-center text-red-900">Tambah Event Baru</h1>
-        <p className="text-center mb-6 text-red-800">Silakan isi seluruh field di bawah ini</p>
-
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           
-          {/* 1. NAMA EVENT (name) */}
+          {/* Input Nama, Lokasi, Tanggal, Deskripsi tetap sama */}
           <div>
             <label className="block text-gray-700 text-sm font-bold mb-1">Nama Event</label>
-            <input
-              type="text"
-              {...register("name", { required: "Nama event wajib diisi" })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-900"
-              placeholder="Contoh: Seminar Digital Empowerment"
-            />
-            {errors.name && <span className="text-red-600 text-xs mt-1 block">{errors.name.message}</span>}
+            <input type="text" {...register("name", { required: true })} className="w-full px-3 py-2 border rounded-lg" />
           </div>
 
-          {/* 2. LOKASI (location) */}
+          {/* 5. Dropdown Kategori */}
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-1">Lokasi (Location)</label>
-            <input
-              type="text"
-              {...register("location", { required: "Lokasi wajib diisi" })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-900"
-              placeholder="Contoh: Aula Gedung C / Zoom Meeting"
-            />
-            {errors.location && <span className="text-red-600 text-xs mt-1 block">{errors.location.message}</span>}
+            <label className="block text-gray-700 text-sm font-bold mb-1">Kategori</label>
+            <select {...register("categoryId", { required: true })} className="w-full px-3 py-2 border rounded-lg bg-white">
+              <option value="">-- Pilih Kategori --</option>
+              {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
           </div>
 
-          {/* 3. TANGGAL EVENT (dateEvent) */}
+          {/* 6. Dropdown Pembicara */}
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-1">Tanggal (Date)</label>
-            <input
-              type="date"
-              {...register("dateEvent", { required: "Tanggal wajib diisi" })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-900"
-            />
-            {errors.dateEvent && <span className="text-red-600 text-xs mt-1 block">{errors.dateEvent.message}</span>}
+            <label className="block text-gray-700 text-sm font-bold mb-1">Pembicara</label>
+            <select {...register("pembicaraId", { required: true })} className="w-full px-3 py-2 border rounded-lg bg-white">
+              <option value="">-- Pilih Pembicara --</option>
+              {speakers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            </select>
           </div>
 
-          {/* 4. DESKRIPSI (description) */}
+          {/* Input Lokasi, Tanggal, Deskripsi */}
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-1">Deskripsi (Description)</label>
-            <textarea
-              {...register("description", { required: "Deskripsi wajib diisi" })}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-900"
-              placeholder="Jelaskan detail mengenai event ini..."
-            />
-            {errors.description && <span className="text-red-600 text-xs mt-1 block">{errors.description.message}</span>}
+            <label className="block text-gray-700 text-sm font-bold mb-1">Lokasi</label>
+            <input type="text" {...register("location", { required: true })} className="w-full px-3 py-2 border rounded-lg" />
           </div>
 
-          {/* BUTTONS */}
+          <div>
+            <label className="block text-gray-700 text-sm font-bold mb-1">Tanggal</label>
+            <input type="date" {...register("dateEvent", { required: true })} className="w-full px-3 py-2 border rounded-lg" />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 text-sm font-bold mb-1">Deskripsi</label>
+            <textarea {...register("description", { required: true })} rows={3} className="w-full px-3 py-2 border rounded-lg" />
+          </div>
+
           <div className="flex flex-row items-center gap-6 mt-6">
-            <button type="submit" className="bg-red-900 hover:bg-red-800 text-white py-2 px-6 rounded font-bold shadow-md transition">
-              Simpan Event
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/dashboard/event")}
-              className="bg-gray-500 text-white py-2 px-6 rounded hover:bg-gray-600 transition shadow-md font-bold"
-            >
-              Batal
-            </button>
+            <button type="submit" className="bg-red-900 text-white py-2 px-6 rounded font-bold">Simpan</button>
+            <button type="button" onClick={() => navigate("/dashboard/event")} className="bg-gray-500 text-white py-2 px-6 rounded font-bold">Batal</button>
           </div>
-
         </form>
       </div>
     </div>

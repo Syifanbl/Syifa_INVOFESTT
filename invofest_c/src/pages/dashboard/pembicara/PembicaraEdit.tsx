@@ -15,10 +15,8 @@ export default function PembicaraEdit() {
   const [pembicaraId, setPembicaraId] = useState<string | number>("");
   const [pembicaraName, setPembicaraName] = useState("");
   const [pembicaraRole, setPembicaraRole] = useState("");
-  const [pembicaraImage, setPembicaraImage] = useState("");
-  const [fileInput, setFileInput] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null); // Tambahan: State Preview
-  const [isSaving, setIsSaving] = useState(false); // Tambahan: State Loading
+  const [pembicaraImage, setPembicaraImage] = useState(""); // Sekarang menyimpan string URL
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const stateData = location.state as { pembicara: PembicaraType } | null;
@@ -33,20 +31,11 @@ export default function PembicaraEdit() {
     }
   }, [location, navigate]);
 
-  // Tambahan: Effect untuk generate preview URL
-  useEffect(() => {
-    if (fileInput) {
-      const url = URL.createObjectURL(fileInput);
-      setPreviewUrl(url);
-      return () => URL.revokeObjectURL(url);
-    }
-  }, [fileInput]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!pembicaraName.trim() || !pembicaraRole.trim() || !pembicaraId) return;
 
-    setIsSaving(true); // Mulai loading
+    setIsSaving(true);
     try {
       const response = await fetch(`https://syifa-backend.vercel.app/pembicara/${pembicaraId}`, {
         method: "PUT",
@@ -56,7 +45,7 @@ export default function PembicaraEdit() {
         body: JSON.stringify({
           name: pembicaraName,
           role: pembicaraRole,
-          image: fileInput ? fileInput.name : pembicaraImage,
+          image: pembicaraImage, // Mengirim string URL langsung
         }),
       });
 
@@ -68,7 +57,7 @@ export default function PembicaraEdit() {
       console.error("Error:", error);
       alert("Gagal menyimpan perubahan.");
     } finally {
-      setIsSaving(false); // Selesai loading
+      setIsSaving(false);
     }
   };
 
@@ -102,22 +91,26 @@ export default function PembicaraEdit() {
           />
         </div>
 
+        {/* Input URL Gambar */}
         <div>
           <label className="block text-gray-700 text-sm font-bold mb-2">
-            Foto Pembicara <span className="text-xs font-normal text-gray-400">(Opsional)</span>
+            URL Foto Pembicara
           </label>
           <input
-            type="file"
-            onChange={(e) => setFileInput(e.target.files?.[0] || null)}
-            className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-900 hover:file:bg-red-100"
+            type="text"
+            value={pembicaraImage}
+            onChange={(e) => setPembicaraImage(e.target.value)}
+            placeholder="https://contoh.com/foto.jpg"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-900 text-sm"
           />
           {/* Preview Foto */}
-          {(previewUrl || (pembicaraImage && !fileInput)) && (
+          {pembicaraImage && (
             <div className="mt-3">
               <img 
-                src={previewUrl || pembicaraImage} 
+                src={pembicaraImage} 
                 alt="Preview" 
                 className="w-20 h-20 object-cover rounded-lg border shadow-sm"
+                onError={(e) => (e.currentTarget.src = "/placeholder.png")} // Opsional: handle jika link rusak
               />
             </div>
           )}

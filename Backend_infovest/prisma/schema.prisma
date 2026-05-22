@@ -29,6 +29,8 @@ model Event{
   dateEvent   DateTime @map("date_event")
   description String
   createdAt   DateTime @default(now()) @map("created_at") // TAMBAHKAN @default(now())
+  pembicaraId Int   @default(1) @map("pembicara_Id")
+  pembicara Pembicara @relation(fields: [pembicaraId], references: [id])
 
   @@map("events")
 }
@@ -38,6 +40,7 @@ model Pembicara{
   name      String
   role      String
   image     String
+  events Event[]
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("pembicaras")
