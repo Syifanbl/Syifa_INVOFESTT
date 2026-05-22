@@ -7,8 +7,8 @@ type EventFormData = {
   dateEvent: string;
   location: string;
   description: string;
-  categoryId: string;  
-  pembicaraId: string;  
+  categoryId: string;   
+  pembicaraId: string;   
 };
 
 interface Sepeaker {
@@ -112,8 +112,8 @@ export default function EventCreate() {
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-1">Tanggal</label>
-            <input type="date" {...register("dateEvent", { required: true })} className="w-full px-3 py-2 border rounded-lg" />
+            <label className="block text-gray-700 text-sm font-bold mb-1">Tanggal & Waktu</label>
+            <input type="datetime-local" {...register("dateEvent", { required: true })} className="w-full px-3 py-2 border rounded-lg" />
           </div>
 
           <div>
