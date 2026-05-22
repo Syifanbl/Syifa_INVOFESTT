@@ -12,20 +12,19 @@ export default function EventEdit() {
   const [description, setDescription] = useState(""); 
 
   useEffect(() => {
-    
-    const stateData = location.state as any;
-
-    if (stateData && stateData.event) {
-      const e = stateData.event;
-      setEventId(String(e.id));
-      setEventName(e.name || "");
-      setLocationName(e.location || "");
-      setWaktu(e.dateEvent || ""); // Pastikan key sesuai dengan database
-      setDescription(e.description || "");
-    } else {
-      navigate("/dashboard/event");
-    }
-  }, [location, navigate]);
+  const stateData = location.state as any;
+  if (stateData && stateData.event) {
+    const e = stateData.event;
+    setEventId(String(e.id));
+    setEventName(e.name || "");
+    setLocationName(e.location || "");
+    // Ambil 16 karakter pertama agar sesuai dengan format datetime-local (YYYY-MM-DDThh:mm)
+    setWaktu(e.dateEvent ? new Date(e.dateEvent).toISOString().substring(0, 16) : "");
+    setDescription(e.description || "");
+  } else {
+    navigate("/dashboard/event");
+  }
+}, [location, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -52,7 +52,7 @@ export default function EventCreate() {
       const formattedData = {
         name: data.name,
         location: data.location,
-        dateEvent: data.dateEvent,
+        dateEvent: new Date(data.dateEvent).toISOString(),
         description: data.description,
         categoryId: parseInt(data.categoryId), 
         pembicaraId: parseInt(data.pembicaraId) 

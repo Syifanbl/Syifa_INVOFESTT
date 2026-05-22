@@ -40,8 +40,9 @@ model Pembicara{
   name      String
   role      String
   image     String
-  events Event[]
   createdAt DateTime @default(now()) @map("created_at")
+
+  events Event[]
 
   @@map("pembicaras")
 }
