@@ -30,7 +30,7 @@ export default function CategoryEdit() {
 
     try {
     
-      const response = await fetch(`http://localhost:3000/categories/${categoryId}`, {
+      const response = await fetch(`https://syifa-backend.vercel.app/categories/${categoryId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

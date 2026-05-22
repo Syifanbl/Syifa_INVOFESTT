@@ -14,7 +14,7 @@ export default function CategoryIndex() {
   const fetchCategories = async () => {
     try {
       // PERBAIKAN URL 1: Mengarah ke /categories sesuai endpoint asli backend
-      const response = await fetch("http://localhost:3000/categories");
+      const response = await fetch("https://syifa-backend.vercel.app/categories");
       if (!response.ok) {
         throw new Error("Gagal mengambil data dari server");
       }
@@ -39,7 +39,7 @@ const handleDelete = async (id: number, name: string) => {
     if (confirm(`Yakin ingin menghapus kategori "${name}"?`)) {
       try {
       
-        const response = await fetch(`http://localhost:3000/categories/${id}`, {
+        const response = await fetch(`https://syifa-backend.vercel.app/categories/${id}`, {
           method: "DELETE",
         });
 

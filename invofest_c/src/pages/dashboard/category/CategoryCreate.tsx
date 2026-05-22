@@ -24,7 +24,7 @@ export default function CategoryCreate() {
   const onSubmit = async (data: FormData) => {
     try {
       // (sesuai backend)
-      const response = await fetch("http://localhost:3000/categories", {
+      const response = await fetch("https://syifa-backend.vercel.app/categories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

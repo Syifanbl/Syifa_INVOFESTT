@@ -22,21 +22,21 @@ export default function DashboardIndex() {
       setLoading(true);
 
       // 1. Ambil Event
-      const resEvent = await fetch("http://localhost:3000/events");
+      const resEvent = await fetch("https://syifa-backend.vercel.app/events");
       if (resEvent.ok) {
         const data = await resEvent.json();
         setTotalEvent(getCount(data));
       }
 
       // 2. Ambil Category
-      const resCategory = await fetch("http://localhost:3000/categories");
+      const resCategory = await fetch("https://syifa-backend.vercel.app/categories");
       if (resCategory.ok) {
         const data = await resCategory.json();
         setTotalCategory(getCount(data));
       }
 
       // 3. Ambil Pembicara
-      const resPembicara = await fetch("http://localhost:3000/pembicara");
+      const resPembicara = await fetch("https://syifa-backend.vercel.app/pembicara");
       if (resPembicara.ok) {
         const data = await resPembicara.json();
         console.log("Struktur data pembicara:", data); // Cek di console F12

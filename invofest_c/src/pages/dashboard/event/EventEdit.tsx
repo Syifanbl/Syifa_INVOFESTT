@@ -32,7 +32,7 @@ export default function EventEdit() {
     if (!eventName.trim() || !eventId) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+      const response = await fetch(`https://syifa-backend.vercel.app/events/${eventId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

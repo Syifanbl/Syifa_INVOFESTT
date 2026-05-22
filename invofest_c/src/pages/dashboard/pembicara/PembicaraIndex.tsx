@@ -14,7 +14,7 @@ export default function PembicaraIndex() {
 
   const fetchPembicara = async () => {
     try {
-      const response = await fetch("http://localhost:3000/pembicara");
+      const response = await fetch("https://syifa-backend.vercel.app/pembicara");
       
       if (!response.ok) {
         throw new Error("Gagal mengambil data dari server");
@@ -41,7 +41,7 @@ export default function PembicaraIndex() {
   const handleDelete = async (id: string | number, name: string) => {
     if (confirm(`Yakin ingin menghapus pembicara "${name}"?`)) {
       try {
-        const response = await fetch(`http://localhost:3000/pembicara/${id}`, {
+        const response = await fetch(`https://syifa-backend.vercel.app/pembicara/${id}`, {
           method: "DELETE",
         });
         if (response.ok) {

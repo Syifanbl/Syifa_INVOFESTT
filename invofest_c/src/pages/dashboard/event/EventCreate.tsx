@@ -25,7 +25,7 @@ export default function EventCreate() {
         description: data.description
       };
 
-      const response = await fetch("http://localhost:3000/events", {
+      const response = await fetch("https://syifa-backend.vercel.app/events", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

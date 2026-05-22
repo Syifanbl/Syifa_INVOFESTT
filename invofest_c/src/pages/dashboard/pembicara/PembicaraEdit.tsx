@@ -48,7 +48,7 @@ export default function PembicaraEdit() {
 
     setIsSaving(true); // Mulai loading
     try {
-      const response = await fetch(`http://localhost:3000/pembicara/${pembicaraId}`, {
+      const response = await fetch(`https://syifa-backend.vercel.app/pembicara/${pembicaraId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

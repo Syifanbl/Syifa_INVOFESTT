@@ -18,7 +18,7 @@ export default function EventIndex() {
   const fetchEvents = async () => {
     try {
       // PERBAIKAN URL: Menembak ke /events (pakai s, sesuai router backend)
-      const response = await fetch("http://localhost:3000/events");
+      const response = await fetch("https://syifa-backend.vercel.app/events");
       if (!response.ok) {
         throw new Error("Gagal mengambil data event dari server");
       }
@@ -42,7 +42,7 @@ export default function EventIndex() {
   const handleDelete = async (id: number, name: string) => {
     if (confirm(`Yakin ingin menghapus event "${name}"?`)) {
       try {
-        const response = await fetch(`http://localhost:3000/events/${id}`, {
+        const response = await fetch(`https://syifa-backend.vercel.app/events/${id}`, {
           method: "DELETE",
         });
 
