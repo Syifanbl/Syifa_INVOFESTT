@@ -4,6 +4,7 @@ export default function DashboardIndex() {
   const [totalEvent, setTotalEvent] = useState<number>(0);
   const [totalCategory, setTotalCategory] = useState<number>(0);
   const [totalPembicara, setTotalPembicara] = useState<number>(0);
+  const [totalUser, setTotalUser] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
   // Fungsi helper untuk mengambil array dari respons API apa pun
@@ -42,6 +43,13 @@ export default function DashboardIndex() {
         console.log("Struktur data pembicara:", data); // Cek di console F12
         setTotalPembicara(getCount(data));
       }
+
+      // 4. Ambil User
+      const resUser = await fetch("http://localhost:3000/users");
+      if (resUser.ok) {
+        const data = await resUser.json();
+        setTotalUser(getCount(data));
+      }
     } catch (error) {
       console.error("Gagal sinkronisasi data dashboard:", error);
     } finally {
@@ -58,7 +66,7 @@ export default function DashboardIndex() {
       <h1 className="text-3xl font-bold text-red-950 mb-1 tracking-tight">Dashboard</h1>
       <p className="text-gray-500 mb-8 text-sm">Selamat datang di dashboard digital empowerment Invofest</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* CARD 1: TOTAL EVENT */}
         <div className="bg-[#FFF0F5] p-8 rounded-2xl border border-pink-200 shadow-sm hover:shadow-md transition-all duration-300 min-h-40 flex flex-col justify-center">
           <p className="text-base font-semibold text-pink-700 tracking-wide mb-1">Total Event</p>
@@ -76,7 +84,13 @@ export default function DashboardIndex() {
           <p className="text-base font-semibold text-pink-700 tracking-wide mb-1">Pembicara</p>
           <h2 className="text-5xl font-extrabold text-red-950">{loading ? "..." : totalPembicara}</h2>
         </div>
+        {/* CARD 4: USER */}
+        <div className="bg-[#FFF0F5] p-8 rounded-2xl border border-pink-200 shadow-sm hover:shadow-md transition-all duration-300 min-h-40 flex flex-col justify-center">
+          <p className="text-base font-semibold text-pink-700 tracking-wide mb-1">User</p>
+          <h2 className="text-5xl font-extrabold text-red-950">{loading ? "..." : totalUser}</h2>
+    </div>
       </div>
+      
     </div>
   );
 }

@@ -15,7 +15,7 @@ export default function PembicaraEdit() {
   const [pembicaraId, setPembicaraId] = useState<string | number>("");
   const [pembicaraName, setPembicaraName] = useState("");
   const [pembicaraRole, setPembicaraRole] = useState("");
-  const [pembicaraImage, setPembicaraImage] = useState(""); // Sekarang menyimpan string URL
+  const [pembicaraImage, setPembicaraImage] = useState(""); 
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {

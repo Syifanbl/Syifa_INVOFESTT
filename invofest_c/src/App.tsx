@@ -10,6 +10,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import RegisterForm from "./pages/RegisterForm";
 import DashboardIndex from "./pages/dashboard/DasboardIndex";
 
+
 import DashboardLayout from "./layouts/DashboardLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import CategoryIndex from "./pages/dashboard/category/CategoryIndex";
@@ -23,6 +24,9 @@ import CategoryEdit from "./pages/dashboard/category/CategoryEdit";
 import PembicaraEdit from "./pages/dashboard/pembicara/PembicaraEdit";
 import EventEdit from "./pages/dashboard/event/EventEdit";
 import BiodataIndex from "./pages/dashboard/Biodata/Biodata.Index";
+import UserEdit from "./pages/dashboard/user/UserEdit";
+import UserCreate from "./pages/dashboard/user/UserCreate";
+import UserIndex from "./pages/dashboard/user/UserIndex";
 
 
 function App() {
@@ -58,7 +62,9 @@ function App() {
             <Route path="/dashboard/pembicara/edit" element={<PembicaraEdit />} />
             <Route path="/dashboard/event/edit" element={<EventEdit />} />
             <Route path="/dashboard/biodata" element={<BiodataIndex />} />
-           
+           <Route path="/dashboard/user" element={<UserIndex />} />
+            <Route path="/dashboard/user/create" element={<UserCreate />} />
+            <Route path="/dashboard/user/edit" element={<UserEdit />} />
           </Route>
         </Route>
 

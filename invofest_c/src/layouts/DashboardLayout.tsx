@@ -31,7 +31,8 @@ export default function DashboardLayout(){
                             { name: "Category", path: "/dashboard/category" },
                             { name: "Pembicara", path: "/dashboard/pembicara" },
                             { name: "Event", path: "/dashboard/event" },
-                            { name: "Biodata", path: "/dashboard/biodata" }, // <-- Menu Biodata baru ditambahkan di sini
+                            { name: "Biodata", path: "/dashboard/biodata" },
+                            { name: "User", path: "/dashboard/user" },
                         ].map((item) => (
                             <li key={item.path}>
                                 <Link
