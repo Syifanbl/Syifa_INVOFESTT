@@ -18,13 +18,13 @@ export const getEvents = async (
     try {
 
         const events = await prisma.event.findMany({
-            orderBy: {
-                createdAt: "desc",
-                include: {
-                    pembicara: true, 
-                },
-            },
-        });
+    include: {
+    pembicara: true,
+},
+    orderBy: {
+    createdAt: "desc",
+},
+});
 
         res.status(200).json(events);
 
