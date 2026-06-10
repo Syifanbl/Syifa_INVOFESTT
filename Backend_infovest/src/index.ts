@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import { logger } from "./middlewares/logger.js";
+import authRoutes from "./routes/authRoute.js";
+import userRoutes from "./routes/userRoute.js";
+
 
 import eventRoutes from "./routes/eventRoute.js";
 import categoryRoutes from "./routes/categoryRoute.js";
@@ -20,6 +23,8 @@ app.get("/", (req , res) => {
 app.use("/events", eventRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/pembicara", pembicaraRoutes);
+app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
